@@ -1,0 +1,66 @@
+
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(230, 176, 0);
+    height: 100vh;
+}
+.container{
+    padding-top: 60px;
+    display: grid;
+    grid-template-rows: repeat(25, 31px);
+    grid-template-columns: repeat(25, 31px);
+    grid-column-gap: 0;
+  grid-row-gap: 0;
+  transition: 0.5s;
+    
+}
+.container div{
+    background-color:gray;
+    border: 1px solid black;
+    width: 30px;
+    height: 30px;
+}
+.container > .red{
+    background-color: darkred;
+}
+.menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(58, 58, 58);
+    border-radius: 20px;
+    border: 1px solid black;
+    width: 30%;
+    height: 250%;
+    transition: 1s;
+}
+.menu select{
+    background-color: transparent;;
+    font-size: 30px;
+    border: none;
+    outline: none;
+    padding: 20px;
+    margin-bottom: 40px;
+    color: white;
+    cursor: pointer;
+}
+.menu button{
+    margin: 70px auto;
+    font-size:30px;
+    width: 200px;
+    border-radius: 20px;
+    outline: none;
+    cursor: pointer;
+}
+.logo{
+    margin-top: 30px;
+}
+P{
+    text-align: center;
+    background-color: tomato;
+    width: 200px;
+    color: white;
+    border-radius: 20px;
+}
