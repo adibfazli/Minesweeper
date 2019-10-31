@@ -1,8 +1,8 @@
 //-----------------CONST and VAR-------------------
-var height , width , mineCount;
-
+var height , width , mineCount , column , row , board , bombPercenterg , bombArray , bombRandom , newDiv;
 
 //-------------------CACHED-----------------------
+bombArray = []
 var logo = document.querySelector(".logo")
 var menu = document.querySelector(".menu")
 
@@ -13,43 +13,63 @@ var play = document.getElementById('play')
 
 var container = document.querySelector('.container');
 
+
+
 //------------------EVENT LISTENER-----------------
 container.addEventListener('click' , clickHandler);
 
 play.addEventListener('click', playHandler)
 
-// size.addEventListener('change', function(){
-//     console.log(size.value)
-// });
-
-// difficulty.addEventListener('change', function(){
-//     console.log(difficulty.value)
-// });
-
-
-
-
-
 //--------------------FUNCTION---------------------
+//size
 function playHandler(){
-    console.log(size.value)
-    console.log(difficulty.value)
     menu.style.display = 'none'
     logo.style.display = 'none'
-    render()
+    if(size.value === 'Small'){
+        column = 10
+        row = 10
+    }else if (size.value === 'Medium' ){
+        column = 25
+        row = 20
+    }else {
+        column = 40 
+        row = 25
+    }
+    //difficulty
+    if(difficulty.value === 'Easy'){
+        bombPercenterg = (column*row)*0.1
+    }else if (difficulty.value === 'Medium' ){
+        bombPercenterg = (column*row)*0.2
+    }else {
+        bombPercenterg = (column*row)*0.3
+    }
+    container.style["grid-template-columns"] = `repeat(${column}, 31px)`;
+    container.style["grid-template-row"] = `repeat(${row}, 31px)`;
+    //setting the board
+    board = new Array((column*row) -1).fill(0);
+    for (i=0 ; i < bombPercenterg ; i++){
+        bombRandom = Math.floor(Math.random()*(column*row))
+        bombArray.push(bombRandom);
 
+        board.splice(bombArray[i] , 1 , -1);
+    }
+    render()
 }
+//box click
 function clickHandler(evt){
     evt.target.classList.add('red')
-    console.log(evt.target.classList)
 }
-
+//make div box
 function render(){
-    for(i=0 ; i <400 ; i++){
-        var newDiv = document.createElement('div');
-        newDiv.setAttribute('class' , i)
+    for(i=0 ; i <(column * row) ; i++){
+        newDiv = document.createElement('div');
+        newDiv.setAttribute('id' , i)
         container.appendChild(newDiv)
+        if (bombArray.includes(i)){
+            newDiv.setAttribute('class' , 'bomb')
+        }
     }
+    
 }
 
 function init(){
