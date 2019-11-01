@@ -6,7 +6,7 @@ body{
     background-color: rgb(230, 176, 0);
     height:auto;
 }
-.container{
+.allDivs{
     padding-top: 60px;
     display: grid;
     grid-column-gap: 0;
@@ -14,13 +14,13 @@ body{
     transition: 0.5s;
     
 }
-.container div{
+.allDivs div{
     background-color:gray;
     border: 1px solid black;
     width: 30px;
     height: 30px;
 }
-.container > .red{
+.allDivs > .red{
     background-color: darkred;
 }
 .menu{
@@ -66,7 +66,7 @@ P{
     color: white;
     border-radius: 20px;
 }
-.container .bomb{
+.allDivs .bomb{
     background-color: cornflowerblue;
 }
 /* REPLAY Button */
