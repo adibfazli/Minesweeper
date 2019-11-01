@@ -12,6 +12,8 @@ var difficulty = document.getElementById('difficulty');
 var play = document.getElementById('play')
 
 var container = document.querySelector('.container');
+var reset = document.querySelector('.reset')
+var refresh = document.querySelector('.refresh')
 
 
 
@@ -69,7 +71,8 @@ function render(){
             newDiv.setAttribute('class' , 'bomb')
         }
     }
-    
+    reset.style.display = 'block'
+    refresh.style.display = 'block'
 }
 
 function init(){
