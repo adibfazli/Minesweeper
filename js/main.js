@@ -67,15 +67,20 @@ function playHandler(){
     for (i=0 ; i < bombPercentage ; i++){
         bombRandom = Math.floor(Math.random()*(column*row))
         bombArray.push(bombRandom);
-
         board.splice(bombArray[i] , 1 , -1);
     }
     render()
 }
 //box click
 function clickHandler(evt){
+    if(board[evt.target.id] !== -1){
+        if(board[parseInt(evt.target.id) + 1]|| board[parseInt(evt.target.id) + 1] || board[parseInt(evt.target.id) - column + 1] || board[parseInt(evt.target.id) - column] || board[parseInt(evt.target.id) - column - 1] || board[parseInt(evt.target.id) - 1] || board[parseInt(evt.target.id) + column - 1] || board[parseInt(evt.target.id) + column] || board[parseInt(evt.target.id) + column + 1] ){
+            console.log('gohe sag' )
+        }
+    }
     evt.target.classList.add('red')
 }
+
 //make div box
 function render(){
     for(i=0 ; i <(column * row) ; i++){
