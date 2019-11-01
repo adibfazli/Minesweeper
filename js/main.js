@@ -2,6 +2,7 @@
 var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh;
 
 //-------------------CACHED-----------------------
+//Variable for bomb count / random location for bomb / store the bomb location / a div to store all other divs / 
 bombArray = []
 logo = document.querySelector(".logo")
 menu = document.querySelector(".menu")
@@ -18,6 +19,7 @@ refresh = document.querySelector('.refresh')
 allDivs = document.createElement('div').classList.add('Alldivs')
 
 //------------------EVENT LISTENER-----------------
+// Need to have play/reset/refresh/cell buttons
 container.addEventListener('click' , clickHandler);
 
 play.addEventListener('click', playHandler)
@@ -26,6 +28,10 @@ reset.addEventListener('click' , init)
 refresh.addEventListener('click' , playHandler)
 
 //--------------------FUNCTION---------------------
+//Need function to run the buttons
+//Need function to eliminate the empety cells sorounding the clicked cell
+//Need function to reset the game
+
 //size
 function playHandler(){
     menu.style.display = 'none'
