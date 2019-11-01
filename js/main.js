@@ -86,6 +86,8 @@ function render(){
 
 function init(){
     allDivs.style.display = 'none'
-    menu.style.display = 'block'
+    reset.style.display = 'none'
+    refresh.style.display = 'none'
+    menu.style.display = 'flex'
     logo.style.display = 'block'
 }
