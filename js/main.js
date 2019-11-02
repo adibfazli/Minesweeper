@@ -1,8 +1,9 @@
 //-----------------CONST and VAR-------------------
-var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh;
+var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , new_column ;
 
 //-------------------CACHED-----------------------
 //Variable for bomb count / random location for bomb / store the bomb location / a div to store all other divs / 
+
 bombArray = []
 logo = document.querySelector(".logo")
 menu = document.querySelector(".menu")
@@ -74,10 +75,44 @@ function playHandler(){
 //box click
 function clickHandler(evt){
     if(board[evt.target.id] !== -1){
-        if(board[parseInt(evt.target.id) + 1]|| board[parseInt(evt.target.id) + 1] || board[parseInt(evt.target.id) - column + 1] || board[parseInt(evt.target.id) - column] || board[parseInt(evt.target.id) - column - 1] || board[parseInt(evt.target.id) - 1] || board[parseInt(evt.target.id) + column - 1] || board[parseInt(evt.target.id) + column] || board[parseInt(evt.target.id) + column + 1] ){
-            console.log('gohe sag' )
+        if(board[parseInt(evt.target.id) + 1] || board[parseInt(evt.target.id) - column + 1] || board[parseInt(evt.target.id) - column] || board[parseInt(evt.target.id) - column - 1] || board[parseInt(evt.target.id) - 1] || board[parseInt(evt.target.id) + column - 1] || board[parseInt(evt.target.id) + column] || board[parseInt(evt.target.id) + column + 1] ){
+            evt.target.textContent = (board[parseInt(evt.target.id) + 1]) + (board[parseInt(evt.target.id) - column + 1]) + (board[parseInt(evt.target.id) - column ]) + (board[parseInt(evt.target.id) - column - 1]) + (board[parseInt(evt.target.id) - 1]) + (board[parseInt(evt.target.id) + column - 1]) + (board[parseInt(evt.target.id) + column]) + (board[parseInt(evt.target.id) + column + 1])
         }
+        diagonalUpR = parseInt(evt.target.id);
+        diagonalDownR = parseInt(evt.target.id);
+        diagonalUpL = parseInt(evt.target.id);
+        diagonalDownL = parseInt(evt.target.id);
+        upR = 0;
+        downR = 0;
+        upL = 0;
+        downL = 0;
+        while (!bombArray.includes(diagonalUpR) && upR <= 48){
+            console.log(upR)
+            document.getElementById(diagonalUpR).style.backgroundColor = 'green'
+            diagonalUpR -= (column -1)
+            upR += 1
+        }
+        while (!bombArray.includes(diagonalDownR) && downR <= 48){
+            console.log(upR)
+            document.getElementById(diagonalDownR).style.backgroundColor = 'yellow'
+            diagonalDownR += (column +1)
+            downR += 1
+        }
+        while (!bombArray.includes(diagonalUpL) && upL <= 48){
+            console.log(upR)
+            document.getElementById(diagonalUpL).style.backgroundColor = 'purple'
+            diagonalUpL -= (column +1)
+            upL += 1
+        }
+        while (!bombArray.includes(diagonalDownL) && downL <= 48){
+            console.log(upR)
+            document.getElementById(diagonalDownL).style.backgroundColor = 'orange'
+            diagonalDownL += (column -1)
+            downL += 1
+        }
+        // allDivs.id[new_column] !== allDivs.cla
     }
+
     evt.target.classList.add('red')
 }
 
