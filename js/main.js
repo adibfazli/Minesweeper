@@ -1,5 +1,5 @@
 //-----------------CONST and VAR-------------------
-var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , new_column ;
+var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh ;
 
 //-------------------CACHED-----------------------
 //Variable for bomb count / random location for bomb / store the bomb location / a div to store all other divs / 
@@ -65,7 +65,7 @@ function playHandler(){
     allDivs.style["grid-template-row"] = `repeat(${row}, 31px)`;
     //                                      setting the board
     board = new Array((column*row) -1).fill(0);
-    for (i=0 ; i < bombPercentage ; i++){
+    for (i=0 ; i <= bombPercentage -1 ; i++){
         bombRandom = Math.floor(Math.random()*(column*row))
         bombArray.push(bombRandom);
         board.splice(bombArray[i] , 1 , -1);
@@ -156,10 +156,11 @@ function clickHandler(evt){
             columnDown = diagonalDownL;
             downL += 1
         }
-        // allDivs.id[new_column] !== allDivs.cla
+    }else{
+        alert('you lost')
     }
 
-    evt.target.classList.add('red')
+    // evt.target.classList.add('red')
 }
 
 //                                      make div box
