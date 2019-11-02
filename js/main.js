@@ -82,32 +82,77 @@ function clickHandler(evt){
         diagonalDownR = parseInt(evt.target.id);
         diagonalUpL = parseInt(evt.target.id);
         diagonalDownL = parseInt(evt.target.id);
+        columnUp = parseInt(evt.target.id);
+        columnDown = parseInt(evt.target.id);
         upR = 0;
         downR = 0;
         upL = 0;
         downL = 0;
-        while (!bombArray.includes(diagonalUpR) && upR <= 48){
-            console.log(upR)
+        while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR)){
+            console.log(!bombArray.includes(diagonalUpR))
+            while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
+                document.getElementById(columnUp).style.backgroundColor = 'green'
+                columnUp -= column;
+            }
+            while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
+                document.getElementById(columnDown).style.backgroundColor = 'green'
+                columnDown += column;
+            }
+
             document.getElementById(diagonalUpR).style.backgroundColor = 'green'
-            diagonalUpR -= (column -1)
+            diagonalUpR -= (column -1);
+
+            columnUp = diagonalUpR;
+            columnDown = diagonalUpR;
             upR += 1
         }
-        while (!bombArray.includes(diagonalDownR) && downR <= 48){
+        //
+        while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR)){
             console.log(upR)
+            while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
+                document.getElementById(columnUp).style.backgroundColor = 'yellow'
+                columnUp -= column;
+            }
+            while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
+                document.getElementById(columnDown).style.backgroundColor = 'yellow'
+                columnDown += column;
+            }
             document.getElementById(diagonalDownR).style.backgroundColor = 'yellow'
             diagonalDownR += (column +1)
+            columnUp = diagonalDownR;
+            columnDown = diagonalDownR;
             downR += 1
         }
-        while (!bombArray.includes(diagonalUpL) && upL <= 48){
+        while (!bombArray.includes(diagonalUpL) && upL <= 48 && document.getElementById(diagonalUpL)){
             console.log(upR)
+            while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
+                document.getElementById(columnUp).style.backgroundColor = 'purple'
+                columnUp -= column;
+            }
+            while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
+                document.getElementById(columnDown).style.backgroundColor = 'purple'
+                columnDown += column;
+            }
             document.getElementById(diagonalUpL).style.backgroundColor = 'purple'
             diagonalUpL -= (column +1)
+            columnUp = diagonalUpL;
+            columnDown = diagonalUpL;
             upL += 1
         }
-        while (!bombArray.includes(diagonalDownL) && downL <= 48){
+        while (!bombArray.includes(diagonalDownL) && downL <= 48 && document.getElementById(diagonalDownL)){
             console.log(upR)
+            while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
+                document.getElementById(columnUp).style.backgroundColor = 'orange'
+                columnUp -= column;
+            }
+            while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
+                document.getElementById(columnDown).style.backgroundColor = 'orange'
+                columnDown += column;
+            }
             document.getElementById(diagonalDownL).style.backgroundColor = 'orange'
             diagonalDownL += (column -1)
+            columnUp = diagonalDownL;
+            columnDown = diagonalDownL;
             downL += 1
         }
         // allDivs.id[new_column] !== allDivs.cla
