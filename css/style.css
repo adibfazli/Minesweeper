@@ -15,8 +15,8 @@ body{
     
 }
 .allDivs div{
-    background-color:gray;
-    border: 1px solid black;
+    background-color:rgb(82, 89, 94);
+    border: 1px solid rgb(0, 0, 0);
     width: 30px;
     height: 30px;
 }
@@ -27,7 +27,7 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgb(58, 58, 58);
+    background-color: rgb(46, 67, 82);
     border-radius: 20px;
     border: 1px solid black;
     width: 30%;
@@ -45,7 +45,7 @@ body{
     cursor: pointer;
 }
 .menu button{
-    margin: 70px auto;
+    margin: 40px auto;
     font-size:30px;
     width: 150px;
     border-radius: 20px;
@@ -54,12 +54,16 @@ body{
     transition: 0.3s;
 }
 .menu button:hover{
-    width: 170px;
+    width: 160px;
+    border-radius: 15px;
 }
 .logo{
     margin-top: 30px;
 }
 P{
+    margin-top: 40px;
+    padding: 10px;
+    font-size: 20px;
     text-align: center;
     background-color: tomato;
     width: 200px;
@@ -100,7 +104,9 @@ P{
 }
 .reset:hover{
     width: 110px;
+    border-radius: 15px;
 }
 .refresh:hover{
     width:110px ;
+    border-radius: 15px;
 }

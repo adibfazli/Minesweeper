@@ -33,7 +33,7 @@ refresh.addEventListener('click' , playHandler)
 //Need function to eliminate the empety cells sorounding the clicked cell
 //Need function to reset the game
 
-//size
+//                                      size
 function playHandler(){
     menu.style.display = 'none'
     logo.style.display = 'none'
@@ -53,7 +53,7 @@ function playHandler(){
         column = 40 
         row = 25
     }
-    //difficulty
+    //                                      difficulty
     if(difficulty.value === 'Easy'){
         bombPercentage = (column*row)*0.1
     }else if (difficulty.value === 'Medium' ){
@@ -63,7 +63,7 @@ function playHandler(){
     }
     allDivs.style["grid-template-columns"] = `repeat(${column}, 31px)`;
     allDivs.style["grid-template-row"] = `repeat(${row}, 31px)`;
-    //setting the board
+    //                                      setting the board
     board = new Array((column*row) -1).fill(0);
     for (i=0 ; i < bombPercentage ; i++){
         bombRandom = Math.floor(Math.random()*(column*row))
@@ -72,7 +72,7 @@ function playHandler(){
     }
     render()
 }
-//box click
+//                                      box click
 function clickHandler(evt){
     if(board[evt.target.id] !== -1){
         if(board[parseInt(evt.target.id) + 1] || board[parseInt(evt.target.id) - column + 1] || board[parseInt(evt.target.id) - column] || board[parseInt(evt.target.id) - column - 1] || board[parseInt(evt.target.id) - 1] || board[parseInt(evt.target.id) + column - 1] || board[parseInt(evt.target.id) + column] || board[parseInt(evt.target.id) + column + 1] ){
@@ -88,68 +88,69 @@ function clickHandler(evt){
         downR = 0;
         upL = 0;
         downL = 0;
+        //                                      Diagonal Up Right    ↗ ↗ ↗ ↗ ↗ ↗ ↗ ↗ 
         while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR)){
             console.log(!bombArray.includes(diagonalUpR))
             while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
-                document.getElementById(columnUp).style.backgroundColor = 'green'
+                document.getElementById(columnUp).style.visibility = 'hidden'
                 columnUp -= column;
             }
             while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
-                document.getElementById(columnDown).style.backgroundColor = 'green'
+                document.getElementById(columnDown).style.visibility = 'hidden'
                 columnDown += column;
             }
-
-            document.getElementById(diagonalUpR).style.backgroundColor = 'green'
+            document.getElementById(diagonalUpR).style.visibility = 'hidden'
             diagonalUpR -= (column -1);
-
             columnUp = diagonalUpR;
             columnDown = diagonalUpR;
             upR += 1
         }
-        //
+        //                                      Diagonal Down Right    ↘ ↘ ↘ ↘ ↘ ↘ ↘ ↘
         while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR)){
             console.log(upR)
             while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
-                document.getElementById(columnUp).style.backgroundColor = 'yellow'
+                document.getElementById(columnUp).style.visibility = 'hidden'
                 columnUp -= column;
             }
             while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
-                document.getElementById(columnDown).style.backgroundColor = 'yellow'
+                document.getElementById(columnDown).style.visibility = 'hidden'
                 columnDown += column;
             }
-            document.getElementById(diagonalDownR).style.backgroundColor = 'yellow'
+            document.getElementById(diagonalDownR).style.visibility = 'hidden'
             diagonalDownR += (column +1)
             columnUp = diagonalDownR;
             columnDown = diagonalDownR;
             downR += 1
         }
+        //                                      Diagonal Up Left    ↖ ↖ ↖ ↖ ↖ ↖ ↖ ↖ 
         while (!bombArray.includes(diagonalUpL) && upL <= 48 && document.getElementById(diagonalUpL)){
             console.log(upR)
             while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
-                document.getElementById(columnUp).style.backgroundColor = 'purple'
+                document.getElementById(columnUp).style.visibility = 'hidden'
                 columnUp -= column;
             }
             while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
-                document.getElementById(columnDown).style.backgroundColor = 'purple'
+                document.getElementById(columnDown).style.visibility = 'hidden'
                 columnDown += column;
             }
-            document.getElementById(diagonalUpL).style.backgroundColor = 'purple'
+            document.getElementById(diagonalUpL).style.visibility = 'hidden'
             diagonalUpL -= (column +1)
             columnUp = diagonalUpL;
             columnDown = diagonalUpL;
             upL += 1
         }
+        //                                      Diagonal Down Left    ↙ ↙ ↙ ↙ ↙ ↙ ↙ ↙ 
         while (!bombArray.includes(diagonalDownL) && downL <= 48 && document.getElementById(diagonalDownL)){
             console.log(upR)
             while (!bombArray.includes(columnUp) && document.getElementById(columnUp)){
-                document.getElementById(columnUp).style.backgroundColor = 'orange'
+                document.getElementById(columnUp).style.visibility = 'hidden'
                 columnUp -= column;
             }
             while (!bombArray.includes(columnDown) && document.getElementById(columnDown)){
-                document.getElementById(columnDown).style.backgroundColor = 'orange'
+                document.getElementById(columnDown).style.visibility = 'hidden'
                 columnDown += column;
             }
-            document.getElementById(diagonalDownL).style.backgroundColor = 'orange'
+            document.getElementById(diagonalDownL).style.visibility = 'hidden'
             diagonalDownL += (column -1)
             columnUp = diagonalDownL;
             columnDown = diagonalDownL;
@@ -161,7 +162,7 @@ function clickHandler(evt){
     evt.target.classList.add('red')
 }
 
-//make div box
+//                                      make div box
 function render(){
     for(i=0 ; i <(column * row) ; i++){
         newDiv = document.createElement('div');
