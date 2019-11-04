@@ -35,7 +35,7 @@ window.addEventListener("keydown",checkKeyPress);
 //Need function to reset the game
 
 function checkKeyPress(key){
-    if(key.which == 3) console.log('Hi')
+    if(key.which == 1) console.log('Hi')
 }
 
 
@@ -105,6 +105,17 @@ function render(){
             if(document.getElementById(i  + column + 1) && !((i  + column + 1)/column == Math.floor((i  + column + 1)/column)))document.getElementById(i  + column + 1).textContent = parseInt(document.getElementById(i  + column + 1).textContent) + 1;
         };
     };
+    //                                  setting the numbers color
+    for(i=0 ; i <(column * row) ; i++){
+        if(document.getElementById(i).textContent=='1') document.getElementById(i).style.color = 'lightblue'
+        if(document.getElementById(i).textContent=='2') document.getElementById(i).style.color = 'yellowgreen'
+        if(document.getElementById(i).textContent=='3') document.getElementById(i).style.color = 'darkorange'
+        if(document.getElementById(i).textContent=='4') document.getElementById(i).style.color = 'red'
+        if(document.getElementById(i).textContent=='5') document.getElementById(i).style.color = 'darkgray'
+        if(document.getElementById(i).textContent=='6') document.getElementById(i).style.color = 'white'
+        if(document.getElementById(i).textContent=='7') document.getElementById(i).style.color = 'purple'
+        if(document.getElementById(i).textContent=='8') document.getElementById(i).style.color = 'black'
+    }
     reset.style.display = 'block';
     refresh.style.display = 'block';
 }
