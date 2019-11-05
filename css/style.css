@@ -94,7 +94,7 @@ P{
     border-radius: 20px;
 }
 .allDivs .bomb{
-    background-color: cornflowerblue;
+    background-color: red;
 }
 /* REPLAY Button */
 .replayBtn{
@@ -141,4 +141,19 @@ P{
     color: white;
     /* text-shadow:3px 3px 4px white; */
 }
-
+.victory{
+    width: 33%;
+    right: 0;
+    position: absolute;
+    bottom: -4%;
+    z-index: 20;
+    display: none;
+}
+.victory2{
+    width: 33%;
+    left: 0;
+    position: absolute;
+    bottom: -4%;
+    z-index: 20;
+    display: none;
+}
