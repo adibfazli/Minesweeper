@@ -29,7 +29,7 @@ play.addEventListener('click', playHandler)
 
 reset.addEventListener('click' , init)
 refresh.addEventListener('click' , playHandler)
-//--------------------FUNCTION---------------------
+//--------------------------------------------------------------------------------------------FUNCTION---------------------
 //Need function to run the buttons
 //Need function to eliminate the empety cells sorounding the clicked cell
 //Need function to reset the game
@@ -37,17 +37,15 @@ refresh.addEventListener('click' , playHandler)
 //                                   right click / flag
 function rightClicked(evt) {
     evt.preventDefault();
-    if(evt.button===2 && !flagged.includes(parseInt(evt.target.id))){
+    if(evt.button===2 && !flagged.includes(parseInt(evt.target.id)) && winCondition){
         evt.target.style.backgroundImage = 'url(image/flaged.png)';
         flagged.push(parseInt(evt.target.id))
-    }else if (evt.button===2 && flagged.includes(parseInt(evt.target.id))){
+    }else if (evt.button===2 && flagged.includes(parseInt(evt.target.id)) && winCondition){
         evt.target.style.backgroundImage = 'url(image/cheese.png)'
         flagged = flagged.filter(item => item !== parseInt(evt.target.id))
     }
     winnerCheck ()
 }
-
-
 //                                      size
 function playHandler(){
     winCondition = true
@@ -73,7 +71,6 @@ function playHandler(){
         column = 40 
         row = 25
     }
-
     //                                      difficulty
     if(difficulty.value === 'Easy'){
         bombPercentage = (column*row)*0.1
@@ -88,12 +85,11 @@ function playHandler(){
     board = new Array((column*row) -1).fill(0);
     for (i=0 ; i <= bombPercentage -1 ; i++){
         bombRandom = Math.floor(Math.random()*(column*row))
-        bombArray.push(bombRandom);
+        if(!bombArray.includes(bombRandom))bombArray.push(bombRandom);
         board.splice(bombArray[i] , 1 , -1);
     }
     render()
 }
-
 //                                      make div box
 function render(){
     for(i=0 ; i <(column * row) ; i++){
@@ -105,18 +101,17 @@ function render(){
             newDiv.setAttribute('class' , 'bomb')
         }
     }
-
     //                                  setting the text content
     for(i=0 ; i <(column * row) ; i++){
         if(bombArray.includes(i)){
-            if(document.getElementById(i+1) && !((i+1)/column == Math.floor((i+1)/column))) document.getElementById(i+1).textContent = parseInt(document.getElementById(i+1).textContent) + 1 ;
-            if(document.getElementById(i - column + 1) && !((i - column + 1)/column == Math.floor((i - column + 1)/column)))document.getElementById(i - column + 1).textContent = parseInt(document.getElementById(i - column + 1).textContent) + 1 ;
+            if(document.getElementById(i+1) && !((i+1)/column === Math.floor((i+1)/column ))) document.getElementById(i+1).textContent = parseInt(document.getElementById(i+1).textContent) + 1 ;
+            if(document.getElementById(i - column + 1) && !((i+1)/column  === Math.floor((i+1)/column )))document.getElementById(i - column + 1).textContent = parseInt(document.getElementById(i - column + 1).textContent) + 1 ;
             if(document.getElementById(i - column))document.getElementById(i - column).textContent = parseInt(document.getElementById(i - column).textContent) + 1 ;
-            if(document.getElementById(i - column - 1))document.getElementById(i - column - 1).textContent = parseInt(document.getElementById(i - column - 1).textContent) + 1 ;
-            if(document.getElementById(i - 1) && !((i-1)/column == Math.floor((i-1)/column)))document.getElementById(i - 1).textContent = parseInt(document.getElementById(i - 1).textContent) + 1 ;
-            if(document.getElementById(i + column - 1))document.getElementById(i + column - 1).textContent = parseInt(document.getElementById(i + column - 1).textContent) + 1 ;
+            if(document.getElementById(i - column - 1) && !(i/column === Math.floor(i/column)))document.getElementById(i - column - 1).textContent = parseInt(document.getElementById(i - column - 1).textContent) + 1 ;
+            if(document.getElementById(i - 1) && !(i/column === Math.floor(i/column)))document.getElementById(i - 1).textContent = parseInt(document.getElementById(i - 1).textContent) + 1 ;
+            if(document.getElementById(i + column - 1) && !(i/column === Math.floor(i/column)))document.getElementById(i + column - 1).textContent = parseInt(document.getElementById(i + column - 1).textContent) + 1 ;
             if(document.getElementById(i + column))document.getElementById(i + column).textContent = parseInt(document.getElementById(i + column).textContent) + 1 ;
-            if(document.getElementById(i  + column + 1) && !((i  + column + 1)/column == Math.floor((i  + column + 1)/column)))document.getElementById(i  + column + 1).textContent = parseInt(document.getElementById(i  + column + 1).textContent) + 1;
+            if(document.getElementById(i  + column + 1) && !((i+1)/column  === Math.floor((i+1)/column )))document.getElementById(i  + column + 1).textContent = parseInt(document.getElementById(i  + column + 1).textContent) + 1;
         };
     };
     //                                  setting the numbers color
@@ -165,8 +160,8 @@ function clickHandler(evt){
                 upL = 0;
                 downL = 0;
                 //                                      Diagonal Up Right    ↗ ↗ ↗ ↗ ↗ ↗ ↗ ↗ 
-                while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR)){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp)){
+                while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
+                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
                             document.getElementById(columnUp).style.backgroundImage = 'none';
                             if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
                                 reveal(columnUp);
@@ -174,7 +169,7 @@ function clickHandler(evt){
                             };
                             columnUp -= column;
                         }
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown)){
+                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown) && !bombArray.includes(columnDown)){
                             document.getElementById(columnDown).style.backgroundImage = 'none';
                             if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
                                 reveal(columnDown);
@@ -194,8 +189,8 @@ function clickHandler(evt){
                         upR += 1;
                 };
                 //                                      Diagonal Down Right    ↘ ↘ ↘ ↘ ↘ ↘ ↘ ↘
-                while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR) && document.getElementById(diagonalDownR)!== null && !flagged.includes(diagonalDownR)){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp)){
+                while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR) && document.getElementById(diagonalDownR)!== null && !flagged.includes(diagonalDownR) && !bombArray.includes(diagonalDownR)){
+                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
                             document.getElementById(columnUp).style.backgroundImage = 'none';
                             if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
                                 reveal(columnUp);
@@ -203,7 +198,7 @@ function clickHandler(evt){
                             };
                             columnUp -= column;
                         };
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown)){
+                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown) && !bombArray.includes(columnDown)){
                             document.getElementById(columnDown).style.backgroundImage = 'none';
                             if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
                                 reveal(columnDown);
@@ -223,8 +218,8 @@ function clickHandler(evt){
                         downR += 1;
                 };
                 //                                      Diagonal Up Left    ↖ ↖ ↖ ↖ ↖ ↖ ↖ ↖ 
-                while (!bombArray.includes(diagonalUpL) && upL <= 48 && document.getElementById(diagonalUpL) && document.getElementById(diagonalUpL)!== null && !flagged.includes(diagonalUpL)){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp)){
+                while (!bombArray.includes(diagonalUpL) && upL <= 48 && document.getElementById(diagonalUpL) && document.getElementById(diagonalUpL)!== null && !flagged.includes(diagonalUpL) && !bombArray.includes(diagonalUpL)){
+                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
                             document.getElementById(columnUp).style.backgroundImage = 'none';
                             if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
                                 reveal(columnUp);
@@ -232,7 +227,7 @@ function clickHandler(evt){
                             }
                             columnUp -= column;
                         };
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown)){
+                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown) && !bombArray.includes(columnDown)){
                             document.getElementById(columnDown).style.backgroundImage = 'none';
                             if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
                                 reveal(columnDown);
@@ -252,8 +247,8 @@ function clickHandler(evt){
                         upL += 1;
                 }
                 //                                      Diagonal Down Left    ↙ ↙ ↙ ↙ ↙ ↙ ↙ ↙ 
-                while (!bombArray.includes(diagonalDownL) && downL <= 48 && document.getElementById(diagonalDownL) && document.getElementById(diagonalDownL)!== null && !flagged.includes(diagonalDownL)){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(diagonalUpR)!== NaN && !flagged.includes(diagonalUpR)){
+                while (!bombArray.includes(diagonalDownL) && downL <= 48 && document.getElementById(diagonalDownL) && document.getElementById(diagonalDownL)!== null && !flagged.includes(diagonalDownL) && !bombArray.includes(diagonalDownL)){
+                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(diagonalUpR)!== NaN && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
                             document.getElementById(columnUp).style.backgroundImage = 'none';
                             if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
                                 reveal(columnUp);
@@ -261,7 +256,7 @@ function clickHandler(evt){
                             }
                             columnUp -= column;
                         };
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR)){
+                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
                             document.getElementById(columnDown).style.backgroundImage = 'none';
                             if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
                                 reveal(columnDown);
@@ -308,11 +303,17 @@ function winnerCheck (){
         if (flagged.includes(bombArray[i])) flagAndBomb++
     }
     if(flagAndBomb == bombArray.length && empetyCellCount == (column * row) - flagAndBomb){
-        document.querySelector('.victory').style.display= 'block'
-    document.querySelector('.victory2').style.display= 'block'
+        for(i=0 ; i <(column * row) ; i++){
+            if(flagged.includes(i)){
+                document.getElementById(i).style.backgroundImage = 'none';
+                document.getElementById(i).style.backgroundImage = 'url(image/trap_broken.png)';
+            }
+        }
+        winCondition = false
+            document.querySelector('.victory').style.display= 'block'
+        document.querySelector('.victory2').style.display= 'block'
     }
 }
-
 function reveal(x){
     if(!bombArray.includes(x) && !flagged.includes(x)){
         document.getElementById(x).style.backgroundImage = 'none';
