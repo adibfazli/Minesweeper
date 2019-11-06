@@ -1,50 +1,48 @@
-//-----------------CONST and VAR-------------------
-var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount;
 
-//                Time
+//-----------------CONST and VAR-------------------
+var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount , sound;
+//      Time
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
 setInterval(setTime, 1000);
+// -------------------------:
+const soundLab = {
+    victory: 'sound/victory.mp3',
+    gameOver : 'sound/Game_Over.mp3',
+    flagOn : 'sound/flag_on.mp3',
+    flagOff: 'sound/flag_off.mp3',
+    trap : 'sound/hit_trap.mp3',
+    start : 'sound/play.mp3'
+}
 //-------------------CACHED-----------------------
 //Variable for bomb count / random location for bomb / store the bomb location / a div to store all other divs / 
 bombArray = []
 flagged = []
 logo = document.querySelector(".logo")
 menu = document.querySelector(".menu")
-
 size = document.getElementById('select');
 difficulty = document.getElementById('difficulty');
-
 play = document.getElementById('play')
-
 container = document.querySelector('.container');
 reset = document.querySelector('.reset')
 refresh = document.querySelector('.refresh')
-
 allDivs = document.createElement('div').classList.add('Alldivs')
-
+sound = document.getElementById('sound')
 //------------------EVENT LISTENER-----------------
 // Need to have play/reset/refresh/cell buttons
 container.addEventListener('click' , clickHandler);
 container.addEventListener('contextmenu', rightClicked)
-
 play.addEventListener('click', playHandler)
-
 reset.addEventListener('click' , init)
 refresh.addEventListener('click' , playHandler)
 //--------------------------------------------------------------------------------------------FUNCTION---------------------
-//Need function to run the buttons
-//Need function to eliminate the empety cells sorounding the clicked cell
-//Need function to reset the game
-
 document.querySelector('body').style.backgroundImage = "url(image/bb)"
 function setTime() {
   ++totalSeconds;
   secondsLabel.innerHTML = pad(totalSeconds % 60);
   minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
 }
-
 function pad(val) {
   var valString = val + "";
   if (valString.length < 2) {
@@ -53,17 +51,19 @@ function pad(val) {
     return valString;
   }
 }
-
-
 //                                   right click / flag
 function rightClicked(evt) {
     evt.preventDefault();
     if(evt.button===2 && !flagged.includes(parseInt(evt.target.id)) && winCondition && flagDisplayCount > 0){
+        sound.setAttribute('src' , soundLab.flagOn)
+        sound.play()
         evt.target.style.backgroundImage = 'url(image/flaged.png)';
         flagged.push(parseInt(evt.target.id))
         flagDisplayCount--
         document.getElementById('flagCountHtml').textContent = `X ${flagDisplayCount}`
     }else if (evt.button===2 && flagged.includes(parseInt(evt.target.id)) && winCondition){
+        sound.setAttribute('src' , soundLab.flagOff)
+        sound.play()
         evt.target.style.backgroundImage = 'url(image/cheese.png)'
         flagged = flagged.filter(item => item !== parseInt(evt.target.id))
         flagDisplayCount++
@@ -71,9 +71,12 @@ function rightClicked(evt) {
     }
     winnerCheck ()
 }
-//                                      size
+//                                     ** Play button **
 function playHandler(){
-    // totalSeconds = 0
+    totalSeconds = 0
+    const player = new Audio();
+    sound.setAttribute('src' , soundLab.start)
+    sound.play()
     document.querySelector('.timeAndFlag').style.display= 'flex'
     document.getElementById('flagCountHtml').style.textContent = flagDisplayCount
     winCondition = true
@@ -88,7 +91,6 @@ function playHandler(){
     allDivs = document.createElement('div')
     allDivs.classList.add('allDivs')
     container.appendChild(allDivs)
-    
     if(size.value === 'Small'){
         column = 10
         row = 10
@@ -99,7 +101,7 @@ function playHandler(){
         column = 40 
         row = 25
     }
-    //                                      difficulty
+    //                                     ** difficulty **
     if(difficulty.value === 'Easy'){
         bombPercentage = (column*row)*0.1
     }else if (difficulty.value === 'Medium' ){
@@ -109,7 +111,7 @@ function playHandler(){
     }
     allDivs.style["grid-template-columns"] = `repeat(${column}, 40px)`;
     allDivs.style["grid-template-row"] = `repeat(${row}, 31px)`;
-    //                                      setting the board
+    //                                    **  setting the board **
     board = new Array((column*row) -1).fill(0);
     for (i=0 ; i <= bombPercentage -1 ; i++){
         bombRandom = Math.floor(Math.random()*(column*row))
@@ -120,7 +122,7 @@ function playHandler(){
     document.getElementById('flagCountHtml').textContent = `X ${flagDisplayCount}`
     render()
 }
-//                                      make div box
+//                                     ** make div box **
 function render(){
     for(i=0 ; i <(column * row) ; i++){
         newDiv = document.createElement('div');
@@ -131,7 +133,7 @@ function render(){
             newDiv.setAttribute('class' , 'bomb')
         }
     }
-    //                                  setting the text content
+    //                                 ** setting the text content **
     for(i=0 ; i <(column * row) ; i++){
         if(bombArray.includes(i)){
             if(document.getElementById(i+1) && !((i+1)/column === Math.floor((i+1)/column ))) document.getElementById(i+1).textContent = parseInt(document.getElementById(i+1).textContent) + 1 ;
@@ -144,7 +146,7 @@ function render(){
             if(document.getElementById(i  + column + 1) && !((i+1)/column  === Math.floor((i+1)/column )))document.getElementById(i  + column + 1).textContent = parseInt(document.getElementById(i  + column + 1).textContent) + 1;
         };
     };
-    //                                  setting the numbers color
+    //                                 ** setting the numbers color **
     for(i=0 ; i <(column * row) ; i++){
         if(document.getElementById(i).textContent=='1') document.getElementById(i).style.color = 'lightblue'
         if(document.getElementById(i).textContent=='2') document.getElementById(i).style.color = 'yellowgreen'
@@ -170,9 +172,8 @@ function init(){
     document.querySelector('.victory').style.display= 'none'
     document.querySelector('.victory2').style.display= 'none'
     document.querySelector('.timeAndFlag').style.display= 'none'
-    // totalSeconds = 0
+    totalSeconds = 0
 }
-
 //                                      box click
 function clickHandler(evt){
     if(winCondition && evt.target.value !== 'flagged'){
@@ -188,8 +189,8 @@ function clickHandler(evt){
                 columnUp = parseInt(evt.target.id);
                 columnDown = parseInt(evt.target.id);
                 upR = 0;
-                downR = 0;
                 upL = 0;
+                downR = 0;
                 downL = 0;
                 //                                      Diagonal Up Right    ↗ ↗ ↗ ↗ ↗ ↗ ↗ ↗ 
                 while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
@@ -308,7 +309,9 @@ function clickHandler(evt){
                         downL += 1;
                 }
             }else{
-                // document.querySelector('body').style.backgroundImage = "none"
+                sound.setAttribute('src' , soundLab.trap)
+                sound.play()
+                document.getElementById('soundOver').play()
                 document.querySelector('body').style.backgroundImage = "url(image/lost_back.jpg)"
                 for(i=0 ; i <(column * row) ; i++){
                     if(bombArray.includes(i)){
@@ -344,7 +347,9 @@ function winnerCheck (){
             }
         }
         winCondition = false
-            document.querySelector('.victory').style.display= 'block'
+        sound.setAttribute('src' , soundLab.victory)
+        sound.play()
+        document.querySelector('.victory').style.display= 'block'
         document.querySelector('.victory2').style.display= 'block'
     }
 }
