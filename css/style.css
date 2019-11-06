@@ -12,7 +12,7 @@ body{
 .allDivs{
     color: red;
     background-color: rgb(8, 46, 0);
-    margin-top: 60px;
+    margin-top: 2px;
     padding: 5px;
     border-radius: 1%;
     display: grid;
@@ -94,7 +94,7 @@ P{
     border-radius: 20px;
 }
 .allDivs .bomb{
-    background-color: red;
+    /* background-color: red; */
 }
 /* REPLAY Button */
 .replayBtn{
@@ -156,4 +156,27 @@ P{
     bottom: -4%;
     z-index: 20;
     display: none;
+}
+.timeAndFlag{
+    margin-top: 40px;
+    display: flex;
+    color: white;
+    align-items: center;
+    background: radial-gradient(ellipse at bottom, #003300 0%,#090a0f 100%);
+    border-radius: 20px;
+    border: 1px solid black;
+    width: 30%;
+    height: 40px;
+    display: none;
+}
+.timeAndFlag .time{
+    font-size: 30px;
+    margin-left: 300px;
+}
+.timeAndFlag img {
+  width: 5%;
+  margin-left: 20px;;
+}
+#flagCountHtml{
+    font-size:30px;
 }

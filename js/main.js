@@ -1,9 +1,13 @@
 //-----------------CONST and VAR-------------------
-var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount;
+var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount;
 
+//                Time
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+setInterval(setTime, 1000);
 //-------------------CACHED-----------------------
 //Variable for bomb count / random location for bomb / store the bomb location / a div to store all other divs / 
-
 bombArray = []
 flagged = []
 logo = document.querySelector(".logo")
@@ -34,20 +38,44 @@ refresh.addEventListener('click' , playHandler)
 //Need function to eliminate the empety cells sorounding the clicked cell
 //Need function to reset the game
 
+document.querySelector('body').style.backgroundImage = "url(image/bb)"
+function setTime() {
+  ++totalSeconds;
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
+
 //                                   right click / flag
 function rightClicked(evt) {
     evt.preventDefault();
-    if(evt.button===2 && !flagged.includes(parseInt(evt.target.id)) && winCondition){
+    if(evt.button===2 && !flagged.includes(parseInt(evt.target.id)) && winCondition && flagDisplayCount > 0){
         evt.target.style.backgroundImage = 'url(image/flaged.png)';
         flagged.push(parseInt(evt.target.id))
+        flagDisplayCount--
+        document.getElementById('flagCountHtml').textContent = `X ${flagDisplayCount}`
     }else if (evt.button===2 && flagged.includes(parseInt(evt.target.id)) && winCondition){
         evt.target.style.backgroundImage = 'url(image/cheese.png)'
         flagged = flagged.filter(item => item !== parseInt(evt.target.id))
+        flagDisplayCount++
+        document.getElementById('flagCountHtml').textContent = `X ${flagDisplayCount}`
     }
     winnerCheck ()
 }
 //                                      size
 function playHandler(){
+    // totalSeconds = 0
+    document.querySelector('.timeAndFlag').style.display= 'flex'
+    document.getElementById('flagCountHtml').style.textContent = flagDisplayCount
     winCondition = true
     flagged = []
     document.querySelector('.victory').style.display= 'none'
@@ -88,6 +116,8 @@ function playHandler(){
         if(!bombArray.includes(bombRandom))bombArray.push(bombRandom);
         board.splice(bombArray[i] , 1 , -1);
     }
+    flagDisplayCount = bombArray.length
+    document.getElementById('flagCountHtml').textContent = `X ${flagDisplayCount}`
     render()
 }
 //                                      make div box
@@ -139,16 +169,18 @@ function init(){
     flagged = []
     document.querySelector('.victory').style.display= 'none'
     document.querySelector('.victory2').style.display= 'none'
+    document.querySelector('.timeAndFlag').style.display= 'none'
+    // totalSeconds = 0
 }
 
 //                                      box click
 function clickHandler(evt){
     if(winCondition && evt.target.value !== 'flagged'){
-        if(evt.target.textContent!== '0' && board[evt.target.id] !== -1){
+        if(evt.target.textContent!== '0' && !bombArray.includes(parseInt(evt.target.id))){
             evt.target.style.backgroundImage = 'none';
             evt.target.style.textIndent = '0';
         }else{
-            if(board[evt.target.id] !== -1){
+            if(!bombArray.includes(parseInt(evt.target.id))){
                 diagonalUpR = parseInt(evt.target.id);
                 diagonalDownR = parseInt(evt.target.id);
                 diagonalUpL = parseInt(evt.target.id);
@@ -276,18 +308,20 @@ function clickHandler(evt){
                         downL += 1;
                 }
             }else{
-                winCondition = false
+                // document.querySelector('body').style.backgroundImage = "none"
+                document.querySelector('body').style.backgroundImage = "url(image/lost_back.jpg)"
                 for(i=0 ; i <(column * row) ; i++){
                     if(bombArray.includes(i)){
                         if(flagged.includes(i)){
-                            document.getElementById(i).style.backgroundImage = 'none';
+                            // document.getElementById(i).style.backgroundImage = 'none';
                             document.getElementById(i).style.backgroundImage = 'url(image/trap_broken.png)';
                         }else{
-                            document.getElementById(i).style.backgroundImage = 'none';
+                            // document.getElementById(i).style.backgroundImage = 'none';
                             document.getElementById(i).style.backgroundImage = 'url(image/trap.png)';
                         }
                     }
                 }
+                winCondition = false
             }
         }
     }
