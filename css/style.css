@@ -180,3 +180,12 @@ P{
 #flagCountHtml{
     font-size:30px;
 }
+#speaker{
+    top: 0;
+    position: absolute;
+    left: 10px;
+    width: 5%;
+    background-color: none;
+    cursor: pointer;
+
+}

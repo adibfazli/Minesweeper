@@ -1,6 +1,6 @@
 
 //-----------------CONST and VAR-------------------
-var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount , sound;
+var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount , sound , back_music , speaker, playingOrPause;
 //      Time
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
@@ -29,6 +29,8 @@ reset = document.querySelector('.reset')
 refresh = document.querySelector('.refresh')
 allDivs = document.createElement('div').classList.add('Alldivs')
 sound = document.getElementById('sound')
+back_music = document.getElementById('music')
+speaker = document.getElementById('speaker')
 //------------------EVENT LISTENER-----------------
 // Need to have play/reset/refresh/cell buttons
 container.addEventListener('click' , clickHandler);
@@ -36,7 +38,21 @@ container.addEventListener('contextmenu', rightClicked)
 play.addEventListener('click', playHandler)
 reset.addEventListener('click' , init)
 refresh.addEventListener('click' , playHandler)
+speaker.addEventListener('click' , playAndPause)
 //--------------------------------------------------------------------------------------------FUNCTION---------------------
+//--------------------music player-----
+function playAndPause(){
+    if(playingOrPause){
+        speaker.setAttribute('src' , 'image/mute.png')
+        back_music.pause()
+        playingOrPause = 0
+    }
+    else{
+        back_music.play()
+        speaker.setAttribute('src' , 'image/speaker.png')
+        playingOrPause = 1
+    }
+}
 document.querySelector('body').style.backgroundImage = "url(image/bb)"
 function setTime() {
   ++totalSeconds;
@@ -193,7 +209,7 @@ function clickHandler(evt){
                 downR = 0;
                 downL = 0;
                 //                                      Diagonal Up Right    ↗ ↗ ↗ ↗ ↗ ↗ ↗ ↗ 
-                while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
+                while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR) && !((diagonalUpR+1)/column === Math.floor((diagonalUpR+1)/column ))){
                         while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
                             document.getElementById(columnUp).style.backgroundImage = 'none';
                             if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
@@ -222,7 +238,7 @@ function clickHandler(evt){
                         upR += 1;
                 };
                 //                                      Diagonal Down Right    ↘ ↘ ↘ ↘ ↘ ↘ ↘ ↘
-                while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR) && document.getElementById(diagonalDownR)!== null && !flagged.includes(diagonalDownR) && !bombArray.includes(diagonalDownR)){
+                while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR) && document.getElementById(diagonalDownR)!== null && !flagged.includes(diagonalDownR) && !bombArray.includes(diagonalDownR) && !((diagonalDownR+1)/column === Math.floor((diagonalDownR+1)/column ))){
                         while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
                             document.getElementById(columnUp).style.backgroundImage = 'none';
                             if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
@@ -278,6 +294,7 @@ function clickHandler(evt){
                         columnUp = diagonalUpL;
                         columnDown = diagonalUpL;
                         upL += 1;
+                        if(!(diagonalUpL/column === Math.floor(diagonalUpL/column))) break
                 }
                 //                                      Diagonal Down Left    ↙ ↙ ↙ ↙ ↙ ↙ ↙ ↙ 
                 while (!bombArray.includes(diagonalDownL) && downL <= 48 && document.getElementById(diagonalDownL) && document.getElementById(diagonalDownL)!== null && !flagged.includes(diagonalDownL) && !bombArray.includes(diagonalDownL)){
@@ -307,6 +324,7 @@ function clickHandler(evt){
                         columnUp = diagonalDownL;
                         columnDown = diagonalDownL;
                         downL += 1;
+                        if(!(diagonalDownL/column === Math.floor(diagonalDownL/column))) break
                 }
             }else{
                 sound.setAttribute('src' , soundLab.trap)
