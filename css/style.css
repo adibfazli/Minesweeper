@@ -24,15 +24,15 @@ body{
 .allDivs div{
     background-image: url(../image/cheese.png);
     background-repeat: no-repeat;
-    background-size: 37px 37px;
-    border: 1px solid rgb(11, 66, 0);
+    background-size: 40px 40px;
+    border: 3px solid rgb(11, 66, 0);
     width: 40px;
     height: 40px;
     text-align: center;
     cursor: pointer;
     text-indent: -9999px;
     font-size: 30px;
-    
+grid-column-gap: ;
 }
 .allDivs > .red{
     background-color: darkred;
@@ -94,7 +94,7 @@ P{
     border-radius: 20px;
 }
 .allDivs .bomb{
-    /* background-color: red; */
+    background-color: rgba(255, 163, 163, 0.349);
 }
 /* REPLAY Button */
 .replayBtn{
@@ -171,7 +171,7 @@ P{
 }
 .timeAndFlag .time{
     font-size: 30px;
-    margin-left: 300px;
+    margin-left: 250px;
 }
 .timeAndFlag img {
   width: 5%;

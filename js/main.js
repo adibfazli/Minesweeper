@@ -1,12 +1,14 @@
 
 //-----------------CONST and VAR-------------------
-var height , width , mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount , sound , back_music , speaker, playingOrPause;
+var mineCount , column , row , board , bombPercentage , bombArray , bombRandom , newDiv , allDivs , logo , menu , size , difficulty , play , container , reset , refresh , winCondition ,flagAndBomb , flagged , empetyCellCount , flagDisplayCount , sound , back_music , speaker, playingOrPause;
 //      Time
 var minutesLabel = document.getElementById("minutes");
 var secondsLabel = document.getElementById("seconds");
 var totalSeconds = 0;
 setInterval(setTime, 1000);
-// -------------------------:
+bombArray = []
+flagged = []
+// ---------------------------------sounds OBJ------:
 const soundLab = {
     victory: 'sound/victory.mp3',
     gameOver : 'sound/Game_Over.mp3',
@@ -16,9 +18,6 @@ const soundLab = {
     start : 'sound/play.mp3'
 }
 //-------------------CACHED-----------------------
-//Variable for bomb count / random location for bomb / store the bomb location / a div to store all other divs / 
-bombArray = []
-flagged = []
 logo = document.querySelector(".logo")
 menu = document.querySelector(".menu")
 size = document.getElementById('select');
@@ -32,7 +31,6 @@ sound = document.getElementById('sound')
 back_music = document.getElementById('music')
 speaker = document.getElementById('speaker')
 //------------------EVENT LISTENER-----------------
-// Need to have play/reset/refresh/cell buttons
 container.addEventListener('click' , clickHandler);
 container.addEventListener('contextmenu', rightClicked)
 play.addEventListener('click', playHandler)
@@ -40,6 +38,12 @@ reset.addEventListener('click' , init)
 refresh.addEventListener('click' , playHandler)
 speaker.addEventListener('click' , playAndPause)
 //--------------------------------------------------------------------------------------------FUNCTION---------------------
+document.querySelector('body').style.backgroundImage = "url(image/bb)"
+function setTime() {
+    ++totalSeconds;
+    secondsLabel.innerHTML = pad(totalSeconds % 60);
+    minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
 //--------------------music player-----
 function playAndPause(){
     if(playingOrPause){
@@ -53,12 +57,6 @@ function playAndPause(){
         playingOrPause = 1
     }
 }
-document.querySelector('body').style.backgroundImage = "url(image/bb)"
-function setTime() {
-  ++totalSeconds;
-  secondsLabel.innerHTML = pad(totalSeconds % 60);
-  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
-}
 function pad(val) {
   var valString = val + "";
   if (valString.length < 2) {
@@ -70,14 +68,14 @@ function pad(val) {
 //                                   right click / flag
 function rightClicked(evt) {
     evt.preventDefault();
-    if(evt.button===2 && !flagged.includes(parseInt(evt.target.id)) && winCondition && flagDisplayCount > 0){
+    if(evt.button===2 && !flagged.includes(parseInt(evt.target.id)) && winCondition && flagDisplayCount > 0 && evt.target.style.backgroundImage !== 'none'){
         sound.setAttribute('src' , soundLab.flagOn)
         sound.play()
         evt.target.style.backgroundImage = 'url(image/flaged.png)';
         flagged.push(parseInt(evt.target.id))
         flagDisplayCount--
         document.getElementById('flagCountHtml').textContent = `X ${flagDisplayCount}`
-    }else if (evt.button===2 && flagged.includes(parseInt(evt.target.id)) && winCondition){
+    }else if(evt.button===2 && flagged.includes(parseInt(evt.target.id)) && winCondition && evt.target.style.backgroundImage !== 'none'){
         sound.setAttribute('src' , soundLab.flagOff)
         sound.play()
         evt.target.style.backgroundImage = 'url(image/cheese.png)'
@@ -127,6 +125,8 @@ function playHandler(){
     }
     allDivs.style["grid-template-columns"] = `repeat(${column}, 40px)`;
     allDivs.style["grid-template-row"] = `repeat(${row}, 31px)`;
+    allDivs.style["grid-column-gap"] = '3px';
+    allDivs.style["grid-row-gap"] = '0px';
     //                                    **  setting the board **
     board = new Array((column*row) -1).fill(0);
     for (i=0 ; i <= bombPercentage -1 ; i++){
@@ -147,6 +147,10 @@ function render(){
         newDiv.textContent = 0
         if (bombArray.includes(i)){
             newDiv.setAttribute('class' , 'bomb')
+        }
+        else if (!bombArray.includes(i)){
+            newDiv.value = true
+            newDiv.name = ''
         }
     }
     //                                 ** setting the text content **
@@ -192,140 +196,13 @@ function init(){
 }
 //                                      box click
 function clickHandler(evt){
-    if(winCondition && evt.target.value !== 'flagged'){
+    if( !flagged.includes(parseInt(evt.target.id)) && winCondition && evt.target.value !== 'flagged' && evt.target.style.backgroundImage !== 'none'){
         if(evt.target.textContent!== '0' && !bombArray.includes(parseInt(evt.target.id))){
             evt.target.style.backgroundImage = 'none';
             evt.target.style.textIndent = '0';
         }else{
             if(!bombArray.includes(parseInt(evt.target.id))){
-                diagonalUpR = parseInt(evt.target.id);
-                diagonalDownR = parseInt(evt.target.id);
-                diagonalUpL = parseInt(evt.target.id);
-                diagonalDownL = parseInt(evt.target.id);
-                columnUp = parseInt(evt.target.id);
-                columnDown = parseInt(evt.target.id);
-                upR = 0;
-                upL = 0;
-                downR = 0;
-                downL = 0;
-                //                                      Diagonal Up Right    ↗ ↗ ↗ ↗ ↗ ↗ ↗ ↗ 
-                while (!bombArray.includes(diagonalUpR) && upR <= 48 && document.getElementById(diagonalUpR) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR) && !((diagonalUpR+1)/column === Math.floor((diagonalUpR+1)/column ))){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
-                            document.getElementById(columnUp).style.backgroundImage = 'none';
-                            if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
-                                reveal(columnUp);
-                                break;
-                            };
-                            columnUp -= column;
-                        }
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown) && !bombArray.includes(columnDown)){
-                            document.getElementById(columnDown).style.backgroundImage = 'none';
-                            if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
-                                reveal(columnDown);
-                                break;
-                            };
-                            columnDown += column;
-                        }
-                        document.getElementById(diagonalUpR).style.backgroundImage = 'none';
-                        if((diagonalUpR - column + 1)/column == Math.floor((diagonalUpR - column + 1)/column)) break;
-                        if(document.getElementById(diagonalUpR).textContent !== '0'){
-                            reveal(diagonalUpR);
-                            break;
-                        } 
-                        diagonalUpR -= (column -1);
-                        columnUp = diagonalUpR;
-                        columnDown = diagonalUpR;
-                        upR += 1;
-                };
-                //                                      Diagonal Down Right    ↘ ↘ ↘ ↘ ↘ ↘ ↘ ↘
-                while (!bombArray.includes(diagonalDownR) && downR <= 48 && document.getElementById(diagonalDownR) && document.getElementById(diagonalDownR)!== null && !flagged.includes(diagonalDownR) && !bombArray.includes(diagonalDownR) && !((diagonalDownR+1)/column === Math.floor((diagonalDownR+1)/column ))){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
-                            document.getElementById(columnUp).style.backgroundImage = 'none';
-                            if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
-                                reveal(columnUp);
-                                break;
-                            };
-                            columnUp -= column;
-                        };
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown) && !bombArray.includes(columnDown)){
-                            document.getElementById(columnDown).style.backgroundImage = 'none';
-                            if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
-                                reveal(columnDown);
-                                break;
-                            };
-                            columnDown += column;
-                        }
-                        document.getElementById(diagonalDownR).style.backgroundImage = 'none';
-                        if((diagonalDownR + column + 1)/column == Math.floor((diagonalDownR + column + 1)/column)) break;
-                        if(document.getElementById(diagonalDownR).textContent !== '0'){
-                            reveal(diagonalDownR);
-                            break;
-                        } 
-                        diagonalDownR += (column +1);
-                        columnUp = diagonalDownR;
-                        columnDown = diagonalDownR;
-                        downR += 1;
-                };
-                //                                      Diagonal Up Left    ↖ ↖ ↖ ↖ ↖ ↖ ↖ ↖ 
-                while (!bombArray.includes(diagonalUpL) && upL <= 48 && document.getElementById(diagonalUpL) && document.getElementById(diagonalUpL)!== null && !flagged.includes(diagonalUpL) && !bombArray.includes(diagonalUpL)){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(columnUp)!== null && !flagged.includes(columnUp) && !bombArray.includes(columnUp)){
-                            document.getElementById(columnUp).style.backgroundImage = 'none';
-                            if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
-                                reveal(columnUp);
-                                break;
-                            }
-                            columnUp -= column;
-                        };
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(columnDown)!== null && !flagged.includes(columnDown) && !bombArray.includes(columnDown)){
-                            document.getElementById(columnDown).style.backgroundImage = 'none';
-                            if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
-                                reveal(columnDown);
-                                break;
-                            }
-                            columnDown += column;
-                        }
-                        document.getElementById(diagonalUpL).style.backgroundImage = 'none';
-                        if((diagonalUpL - 1)/column === Math.floor((diagonalUpL)/column)) break;
-                        if(document.getElementById(diagonalUpL).textContent !== '0'){
-                            reveal(diagonalUpL);
-                            break;
-                        } 
-                        diagonalUpL -= (column +1);
-                        columnUp = diagonalUpL;
-                        columnDown = diagonalUpL;
-                        upL += 1;
-                        if(!(diagonalUpL/column === Math.floor(diagonalUpL/column))) break
-                }
-                //                                      Diagonal Down Left    ↙ ↙ ↙ ↙ ↙ ↙ ↙ ↙ 
-                while (!bombArray.includes(diagonalDownL) && downL <= 48 && document.getElementById(diagonalDownL) && document.getElementById(diagonalDownL)!== null && !flagged.includes(diagonalDownL) && !bombArray.includes(diagonalDownL)){
-                        while (!bombArray.includes(columnUp) && document.getElementById(columnUp) && document.getElementById(diagonalUpR)!== NaN && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
-                            document.getElementById(columnUp).style.backgroundImage = 'none';
-                            if(document.getElementById(columnUp).textContent !== "0" && document.getElementById(columnUp)!== null){
-                                reveal(columnUp);
-                                break;
-                            }
-                            columnUp -= column;
-                        };
-                        while (!bombArray.includes(columnDown) && document.getElementById(columnDown) && document.getElementById(diagonalUpR)!== null && !flagged.includes(diagonalUpR) && !bombArray.includes(diagonalUpR)){
-                            document.getElementById(columnDown).style.backgroundImage = 'none';
-                            if(document.getElementById(columnDown).textContent !== "0" && document.getElementById(columnDown)!== null){
-                                reveal(columnDown);
-                                break;
-                            }
-                            columnDown += column;
-                        };
-                        document.getElementById(diagonalDownL).style.backgroundImage = 'none';
-                        if((diagonalDownL - 1)/column === Math.floor((diagonalDownL )/column)) break;
-                        if(document.getElementById(diagonalDownL).textContent !== '0'){
-                            reveal(diagonalDownL);
-                            break;
-                        } 
-                        diagonalDownL += (column -1);
-                        columnUp = diagonalDownL;
-                        columnDown = diagonalDownL;
-                        downL += 1;
-                        if(!(diagonalDownL/column === Math.floor(diagonalDownL/column))) break
-                }
+                unbox(parseInt(evt.target.id))
             }else{
                 sound.setAttribute('src' , soundLab.trap)
                 sound.play()
@@ -334,10 +211,8 @@ function clickHandler(evt){
                 for(i=0 ; i <(column * row) ; i++){
                     if(bombArray.includes(i)){
                         if(flagged.includes(i)){
-                            // document.getElementById(i).style.backgroundImage = 'none';
                             document.getElementById(i).style.backgroundImage = 'url(image/trap_broken.png)';
                         }else{
-                            // document.getElementById(i).style.backgroundImage = 'none';
                             document.getElementById(i).style.backgroundImage = 'url(image/trap.png)';
                         }
                     }
@@ -371,41 +246,69 @@ function winnerCheck (){
         document.querySelector('.victory2').style.display= 'block'
     }
 }
-function reveal(x){
-    if(!bombArray.includes(x) && !flagged.includes(x)){
-        document.getElementById(x).style.backgroundImage = 'none';
-        if(document.getElementById(x).textContent !== '0') document.getElementById(x).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x + 1) && !flagged.includes(x + 1)){
-        document.getElementById(x + 1).style.backgroundImage = 'none';
-        if(document.getElementById(x + 1).textContent !== '0') document.getElementById(x + 1).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x - column + 1) && !flagged.includes(x - column + 1)){
-        document.getElementById(x - column + 1).style.backgroundImage = 'none';
-        if(document.getElementById(x - column + 1).textContent !== '0')document.getElementById(x - column + 1).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x - column) && !flagged.includes(x - column)){
-        document.getElementById(x - column).style.backgroundImage = 'none';
-        if(document.getElementById(x - column).textContent !== '0')document.getElementById(x - column).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x - column - 1)&& !flagged.includes(x - column - 1)){
-        document.getElementById(x - column - 1).style.backgroundImage = 'none';
-        if(document.getElementById(x - column - 1).textContent !== '0')document.getElementById(x - column - 1).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x - 1) && !flagged.includes(x - 1)){
-        document.getElementById(x - 1).style.backgroundImage = 'none';
-        if(document.getElementById(x - 1).textContent !== '0')document.getElementById(x - 1).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x + column - 1) && !flagged.includes(x + column - 1)){
-        document.getElementById(x + column - 1).style.backgroundImage = 'none';
-        if(document.getElementById(x + column - 1).textContent !== '0')document.getElementById(x + column - 1).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x + column) && !flagged.includes(x + column)){
-        document.getElementById(x + column).style.backgroundImage = 'none';
-        if(document.getElementById(x + column).textContent !== '0')document.getElementById(x + column).style.textIndent = '0';
-    };
-    if(!bombArray.includes(x + column + 1) && !flagged.includes(x + column + 1)){
-        document.getElementById(x + column + 1).style.backgroundImage = 'none';
-        if(document.getElementById(x + column + 1).textContent !== '0')document.getElementById(x + column + 1).style.textIndent = '0';
-    };
-};
+function unbox (divId){
+    let div = document.getElementById(divId);
+    if(!flagged.includes(parseInt(divId)) && divId === 0 && div.value){
+        div.name = "ltc";
+        div.style.backgroundImage = 'none';
+       if(div.textContent !== '0')div.style.textIndent = '0'
+    }
+    else if( !flagged.includes(parseInt(divId)) && divId+1 === column && div.value){
+        div.name = "rtc"
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'
+        ;}
+    else if (!flagged.includes(parseInt(divId)) &&divId+1 === column * row && div.value) {
+        div.name = "rbc"
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'
+        ;}
+    else if (!flagged.includes(parseInt(divId)) &&divId+1 === (column*row) - column + 1 && div.value) {
+        div.name = "lbc"
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'
+        ;}
+    else if (!flagged.includes(parseInt(divId)) &&(divId+1)/column === Math.floor((divId+2)/column) && div.value){
+        div.name = "rw"
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0' 
+    }
+    else if(!flagged.includes(parseInt(divId)) &&divId%column === 0 && div.value){
+        div.name = "lw"
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'  
+        }
+    else if(!flagged.includes(parseInt(divId)) &&(divId + column) < (column*row)  && (divId - column) > 0 && div.value){
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'
+    }
+    else if(!flagged.includes(parseInt(divId)) &&(divId + column) < (column*row) && div.value ){
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'
+            }
+    else if(!flagged.includes(parseInt(divId)) &&(divId - column) >= 0 && div.value){
+        div.style.backgroundImage = 'none';
+        if(div.textContent !== '0')div.style.textIndent = '0'
+            };
+    if(div.textContent == 0 && div.value && div.name ==""){
+        if( (divId+column) < (column*row) && (divId-column) > 0){
+            div.value=false;
+            unbox(divId+column);
+            div.value=false;
+            unbox(divId-column);
+            div.value=false;
+            unbox(divId+1);
+            div.value=false;
+            unbox(divId-1);
+        }  
+        else if((divId+column) < (column*row)){
+            unbox(divId+1);
+            div.value=false;
+            unbox(divId-1);
+            div.value=false;
+        }           
+    }
+        else if(div.textContent == 0 && div.value && div.name !==""){
+            return;
+        }
+     };
